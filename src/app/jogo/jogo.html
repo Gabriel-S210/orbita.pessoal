@@ -1,0 +1,212 @@
+<div class="jogo-container">
+  <div class="container">
+    <header class="page-header">
+      <h1>🎮 Navegador Estelar</h1>
+      <p>Explore o universo através de jogos educacionais e desafios astronômicos!</p>
+    </header>
+
+    <!-- Game Stats -->
+    <section class="game-stats">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-info">
+            <h3>{{playerStats.pontuacao}}</h3>
+            <p>Pontos Totais</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-info">
+            <h3>{{playerStats.nivel}}</h3>
+            <p>Nível Atual</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-info">
+            <h3>{{playerStats.acertos}}/{{playerStats.tentativas}}</h3>
+            <p>Taxa de Acerto</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-info">
+            <h3>{{playerStats.sequencia}}</h3>
+            <p>Sequência Atual</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Modes -->
+    <section class="game-modes" *ngIf="!gameActive">
+      <h2>🚀 Modos de Jogo</h2>
+      <div class="grid grid-3">
+        <div class="card game-mode-card" (click)="startGame('navegacao')">
+          <div class="mode-icon">🧭</div>
+          <h3>Quiz de Navegação</h3>
+          <p>Navegue entre objetos celestes respondendo perguntas sobre coordenadas e localização no céu.</p>
+          <div class="mode-difficulty">Dificuldade: ⭐⭐</div>
+        </div>
+        
+        <div class="card game-mode-card" (click)="startGame('identificacao')">
+          <div class="mode-icon">🔍</div>
+          <h3>Caça ao Objeto</h3>
+          <p>Identifique planetas, estrelas e constelações em mapas estelares simulados.</p>
+          <div class="mode-difficulty">Dificuldade: ⭐⭐⭐</div>
+        </div>
+        
+        <div class="card game-mode-card" (click)="startGame('desafio')">
+          <div class="mode-icon">⚡</div>
+          <h3>Desafio Diário</h3>
+          <p>Mini-missões especiais que testam conhecimento e habilidades de observação.</p>
+          <div class="mode-difficulty">Dificuldade: ⭐⭐⭐⭐</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Active Game -->
+    <section class="active-game" *ngIf="gameActive">
+      <div class="game-header">
+        <h2>{{currentGame.titulo}}</h2>
+        <div class="game-progress">
+          <span>Pergunta {{currentQuestionIndex + 1}} de {{currentGame.perguntas.length}}</span>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="(currentQuestionIndex / currentGame.perguntas.length) * 100"></div>
+          </div>
+        </div>
+        <div class="game-score">
+          <span>Pontos: {{gameScore}}</span>
+          <span>Tempo: {{gameTime}}s</span>
+        </div>
+      </div>
+
+      <div class="question-container">
+        <div class="question-card">
+          <div class="question-image" *ngIf="currentQuestion.imagem">
+            <div class="star-map" [innerHTML]="currentQuestion.imagem"></div>
+          </div>
+          
+          <div class="question-content">
+            <h3>{{currentQuestion.pergunta}}</h3>
+            <p class="question-hint" *ngIf="currentQuestion.dica && showHint">
+              💡 Dica: {{currentQuestion.dica}}
+            </p>
+            
+            <div class="answers-grid">
+              <button 
+                class="answer-btn" 
+                *ngFor="let opcao of currentQuestion.opcoes; let i = index"
+                [class.selected]="selectedAnswer === i"
+                [class.correct]="showResult && i === currentQuestion.respostaCorreta"
+                [class.incorrect]="showResult && selectedAnswer === i && i !== currentQuestion.respostaCorreta"
+                [disabled]="showResult"
+                (click)="selectAnswer(i)">
+                {{opcao}}
+              </button>
+            </div>
+            
+            <div class="question-actions">
+              <button class="btn btn-secondary" (click)="toggleHint()" *ngIf="!showHint && currentQuestion.dica">
+                💡 Ver Dica (-10 pontos)
+              </button>
+              <button class="btn btn-primary" (click)="submitAnswer()" [disabled]="selectedAnswer === null || showResult">
+                Confirmar Resposta
+              </button>
+              <button class="btn btn-secondary" (click)="nextQuestion()" *ngIf="showResult">
+                {{currentQuestionIndex < currentGame.perguntas.length - 1 ? 'Próxima' : 'Finalizar'}}
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Result Feedback -->
+        <div class="result-feedback" *ngIf="showResult">
+          <div class="feedback-card" [class.correct]="lastAnswerCorrect" [class.incorrect]="!lastAnswerCorrect">
+            <div class="feedback-icon">{{lastAnswerCorrect ? '✅' : '❌'}}</div>
+            <h4>{{lastAnswerCorrect ? 'Correto!' : 'Incorreto!'}}</h4>
+            <p>{{currentQuestion.explicacao}}</p>
+            <div class="points-earned" *ngIf="lastAnswerCorrect">
+              +{{lastPointsEarned}} pontos
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Results -->
+    <section class="game-results" *ngIf="showGameResults">
+      <div class="card results-card">
+        <h2>🎉 Jogo Finalizado!</h2>
+        <div class="results-stats">
+          <div class="result-stat">
+            <span class="stat-label">Pontuação Final:</span>
+            <span class="stat-value">{{finalScore}} pontos</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-label">Acertos:</span>
+            <span class="stat-value">{{correctAnswers}}/{{totalQuestions}}</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-label">Tempo Total:</span>
+            <span class="stat-value">{{totalTime}}s</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-label">Performance:</span>
+            <span class="stat-value">{{getPerformanceRating()}}</span>
+          </div>
+        </div>
+        
+        <div class="knowledge-capsule" *ngIf="knowledgeCapsule">
+          <h3>🎓 Cápsula do Conhecimento</h3>
+          <p>{{knowledgeCapsule}}</p>
+        </div>
+        
+        <div class="results-actions">
+          <button class="btn btn-primary" (click)="playAgain()">🔄 Jogar Novamente</button>
+          <button class="btn btn-secondary" (click)="backToModes()">🏠 Voltar aos Modos</button>
+          <button class="btn btn-secondary" (click)="shareResults()">📤 Compartilhar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section class="leaderboard" *ngIf="!gameActive">
+      <h2>🏆 Ranking Semanal</h2>
+      <div class="card leaderboard-card">
+        <div class="leaderboard-list">
+          <div class="leaderboard-item" *ngFor="let player of leaderboard; let i = index">
+            <div class="rank">{{i + 1}}</div>
+            <div class="player-info">
+              <span class="player-name">{{player.nome}}</span>
+              <span class="player-level">Nível {{player.nivel}}</span>
+            </div>
+            <div class="player-score">{{player.pontuacao}} pts</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily Challenge -->
+    <section class="daily-challenge" *ngIf="!gameActive">
+      <div class="card challenge-card">
+        <h2>⚡ Desafio de Hoje</h2>
+        <div class="challenge-content">
+          <div class="challenge-icon">{{dailyChallenge.icon}}</div>
+          <div class="challenge-info">
+            <h3>{{dailyChallenge.titulo}}</h3>
+            <p>{{dailyChallenge.descricao}}</p>
+            <div class="challenge-reward">
+              Recompensa: {{dailyChallenge.recompensa}} pontos
+            </div>
+          </div>
+          <button class="btn btn-primary" (click)="startDailyChallenge()" [disabled]="dailyChallenge.completado">
+            {{dailyChallenge.completado ? '✅ Completado' : '🚀 Aceitar Desafio'}}
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

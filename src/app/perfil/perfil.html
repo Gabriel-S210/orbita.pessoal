@@ -1,0 +1,197 @@
+<div class="perfil-container">
+  <div class="container">
+    <header class="page-header">
+      <h1>👤 Meu Perfil Orbital</h1>
+      <p class="subtitle">Personalize sua experiência astronômica</p>
+    </header>
+
+    <!-- Seção de Login -->
+    <section class="login-section" *ngIf="!isLoggedIn">
+      <div class="card login-card">
+        <h2>🚀 Faça Login para Acessar seu Perfil</h2>
+        <p>Conecte-se com sua conta para personalizar sua experiência astronômica:</p>
+        
+        <div class="login-buttons">
+          <button class="btn btn-secondary" (click)="loginWithGoogle()">
+            <img src="/assets/google-icon.png" alt="" class="social-icon">
+            Entrar com Google
+          </button>
+          <button class="btn btn-primary" (click)="loginWithFacebook()">
+            <img src="/assets/facebook-icon.png" alt="" class="social-icon">
+            Entrar com Facebook
+          </button>
+        </div>
+        
+        <div class="benefits">
+          <h3>✨ Benefícios do Perfil Orbital:</h3>
+          <ul>
+            <li>🎯 Conteúdo personalizado baseado no seu nível</li>
+            <li>📍 Informações astronômicas da sua localização</li>
+            <li>🏆 Acompanhamento do seu progresso nos jogos</li>
+            <li>🔔 Notificações de eventos astronômicos</li>
+            <li>📚 Histórico de cursos e atividades</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção do Perfil (quando logado) -->
+    <section class="profile-section" *ngIf="isLoggedIn">
+      <!-- Informações Básicas -->
+      <div class="card profile-info">
+        <div class="profile-header">
+          <div class="avatar">
+            <img [src]="userProfile.avatar" [alt]="userProfile.name" *ngIf="userProfile.avatar">
+            <div class="avatar-placeholder" *ngIf="!userProfile.avatar">
+              {{ getInitials(userProfile.name) }}
+            </div>
+          </div>
+          <div class="user-info">
+            <h2>{{ userProfile.name }}</h2>
+            <p class="email">{{ userProfile.email }}</p>
+            <p class="member-since">Membro desde {{ userProfile.memberSince | date:'MMMM yyyy':'pt-BR' }}</p>
+          </div>
+          <button class="btn btn-secondary" (click)="editProfile()">✏️ Editar</button>
+        </div>
+      </div>
+
+      <!-- Configurações do Perfil Orbital -->
+      <div class="card orbital-settings">
+        <h2>🎯 Configurações do Perfil Orbital</h2>
+        
+        <div class="setting-group">
+          <h3>📚 Nível de Conhecimento</h3>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="level" value="iniciante" [(ngModel)]="userProfile.level">
+              <span>🌱 Iniciante - Começando a explorar o universo</span>
+            </label>
+            <label>
+              <input type="radio" name="level" value="amador" [(ngModel)]="userProfile.level">
+              <span>🔭 Amador - Conhecimento básico de astronomia</span>
+            </label>
+            <label>
+              <input type="radio" name="level" value="avancado" [(ngModel)]="userProfile.level">
+              <span>🚀 Avançado - Conhecimento técnico aprofundado</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>🌍 Tópicos de Interesse</h3>
+          <div class="checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.interests.planetas">
+              <span>🪐 Planetas e Sistema Solar</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.interests.estrelas">
+              <span>⭐ Estrelas e Evolução Estelar</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.interests.galaxias">
+              <span>🌌 Galáxias e Cosmologia</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.interests.buracos_negros">
+              <span>🕳️ Buracos Negros</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.interests.astrofotografia">
+              <span>📸 Astrofotografia</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.interests.exploracao_espacial">
+              <span>🚀 Exploração Espacial</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>📍 Localização</h3>
+          <div class="location-settings">
+            <label>
+              <span>Cidade:</span>
+              <input type="text" [(ngModel)]="userProfile.location.city" placeholder="Ex: Salvador">
+            </label>
+            <label>
+              <span>Estado:</span>
+              <input type="text" [(ngModel)]="userProfile.location.state" placeholder="Ex: BA">
+            </label>
+            <p class="location-note">
+              💡 Usamos sua localização para mostrar informações astronômicas específicas da sua região
+            </p>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>🔔 Notificações</h3>
+          <div class="checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.notifications.eventos">
+              <span>🌠 Eventos astronômicos (eclipses, chuvas de meteoros)</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.notifications.iss">
+              <span>🛰️ Passagens da Estação Espacial Internacional</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.notifications.noticias">
+              <span>📰 Novas notícias e descobertas</span>
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="userProfile.notifications.cursos">
+              <span>🎓 Novos cursos e conteúdos</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="save-button">
+          <button class="btn btn-primary" (click)="saveProfile()">💾 Salvar Configurações</button>
+        </div>
+      </div>
+
+      <!-- Estatísticas e Progresso -->
+      <div class="card stats-card">
+        <h2>📊 Suas Estatísticas</h2>
+        
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">{{ userStats.cursosCompletos }}</div>
+            <div class="stat-label">🎓 Cursos Completos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ userStats.jogosPontuacao }}</div>
+            <div class="stat-label">🎮 Pontuação nos Jogos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ userStats.diasAtivo }}</div>
+            <div class="stat-label">📅 Dias Ativo</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ userStats.noticiasLidas }}</div>
+            <div class="stat-label">📰 Notícias Lidas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ações da Conta -->
+      <div class="card account-actions">
+        <h2>⚙️ Configurações da Conta</h2>
+        
+        <div class="action-buttons">
+          <button class="btn btn-secondary" (click)="exportData()">
+            📥 Exportar Meus Dados
+          </button>
+          <button class="btn btn-secondary" (click)="deleteAccount()">
+            🗑️ Excluir Conta
+          </button>
+          <button class="btn btn-primary" (click)="logout()">
+            🚪 Sair
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

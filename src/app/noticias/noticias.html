@@ -1,0 +1,154 @@
+<div class="noticias-container">
+  <div class="container">
+    <header class="page-header">
+      <h1>📰 Notícias e Blog "Efemérides Diárias"</h1>
+      <p>Fique por dentro das últimas descobertas e eventos astronômicos, com conteúdo curado especialmente para seus interesses!</p>
+    </header>
+
+    <!-- Seção "O Que Ver no Céu Hoje" -->
+    <section class="sky-today">
+      <div class="card featured-card">
+        <h2>🌟 O Que Ver no Céu Hoje (Salvador, BA)</h2>
+        <div class="sky-info">
+          <div class="sky-item">
+            <h3>🌙 Lua</h3>
+            <p>Crescente - Visível até 23h</p>
+          </div>
+          <div class="sky-item">
+            <h3>🪐 Planetas Visíveis</h3>
+            <p>Júpiter (21h-02h) | Saturno (22h-04h)</p>
+          </div>
+          <div class="sky-item">
+            <h3>⭐ Constelações</h3>
+            <p>Órion, Cruzeiro do Sul, Escorpião</p>
+          </div>
+          <div class="sky-item">
+            <h3>🛰️ Passagem da ISS</h3>
+            <p>Hoje às 20:15 (direção NO-SE)</p>
+          </div>
+        </div>
+        <button class="btn btn-secondary" (click)="showDetailedSkyInfo()">Ver Detalhes Completos</button>
+      </div>
+    </section>
+
+    <!-- Filtros de Notícias -->
+    <section class="news-filters">
+      <h2>🎯 Filtrar por Interesse</h2>
+      <div class="filter-buttons">
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'todas'"
+          (click)="filterNews('todas')">
+          Todas
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'planetas'"
+          (click)="filterNews('planetas')">
+          🪐 Planetas
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'estrelas'"
+          (click)="filterNews('estrelas')">
+          ⭐ Estrelas
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'galaxias'"
+          (click)="filterNews('galaxias')">
+          🌌 Galáxias
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'buracos-negros'"
+          (click)="filterNews('buracos-negros')">
+          🕳️ Buracos Negros
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedFilter === 'exploracao'"
+          (click)="filterNews('exploracao')">
+          🚀 Exploração
+        </button>
+      </div>
+    </section>
+
+    <!-- Lista de Notícias -->
+    <section class="news-list">
+      <h2>📰 Últimas Notícias</h2>
+      <div class="grid grid-2">
+        <div class="card news-card" *ngFor="let noticia of filteredNews">
+          <div class="news-image">
+            <span class="news-icon">{{noticia.icon}}</span>
+          </div>
+          <div class="news-content">
+            <span class="news-category">{{noticia.categoria}}</span>
+            <h3>{{noticia.titulo}}</h3>
+            <p class="news-excerpt">{{noticia.resumo}}</p>
+            <div class="news-meta">
+              <span class="news-date">{{noticia.data}}</span>
+              <span class="news-source">{{noticia.fonte}}</span>
+            </div>
+            <div class="news-actions">
+              <a [href]="noticia.linkOriginal" target="_blank" class="btn btn-primary">
+                Ler Notícia Original
+              </a>
+              <button class="btn btn-secondary" (click)="saveToFavorites(noticia)">
+                ❤️ Favoritar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Artigos de Blog -->
+    <section class="blog-articles">
+      <h2>📝 Artigos de Blog "Contexto Cósmico"</h2>
+      <p>Artigos que conectam eventos astronômicos atuais com a história e a ciência por trás deles.</p>
+      
+      <div class="grid grid-3">
+        <div class="card article-card" *ngFor="let artigo of blogArticles">
+          <div class="article-header">
+            <span class="article-icon">{{artigo.icon}}</span>
+            <span class="article-level">{{artigo.nivel}}</span>
+          </div>
+          <h3>{{artigo.titulo}}</h3>
+          <p class="article-excerpt">{{artigo.resumo}}</p>
+          <div class="article-meta">
+            <span class="article-author">{{artigo.autor}}</span>
+            <span class="article-read-time">{{artigo.tempoLeitura}}</span>
+          </div>
+          <div class="article-actions">
+            <button class="btn btn-primary" (click)="readArticle(artigo)">
+              Ler Artigo
+            </button>
+            <button class="btn btn-secondary" (click)="shareArticle(artigo)">
+              📤 Compartilhar
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+      <div class="card newsletter-card">
+        <h2>📧 Receba as Efemérides Diárias</h2>
+        <p>Cadastre-se para receber diariamente informações sobre o que observar no céu de Salvador!</p>
+        <div class="newsletter-form">
+          <input 
+            type="email" 
+            placeholder="Seu e-mail" 
+            [(ngModel)]="newsletterEmail"
+            class="newsletter-input">
+          <button class="btn btn-primary" (click)="subscribeNewsletter()">
+            Inscrever-se
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

@@ -1,0 +1,218 @@
+<div class="cursos-container">
+  <div class="container">
+    <header class="page-header">
+      <h1>🎓 Cursos "Jornada Cósmica"</h1>
+      <p>Trilhas de aprendizagem personalizadas que se adaptam ao seu progresso e interesses astronômicos!</p>
+    </header>
+
+    <!-- Perfil de Aprendizagem -->
+    <section class="learning-profile">
+      <div class="card profile-setup">
+        <h2>🎯 Configure seu Perfil de Aprendizagem</h2>
+        <div class="profile-form">
+          <div class="form-group">
+            <label>📚 Nível de Conhecimento:</label>
+            <select [(ngModel)]="userProfile.nivel" (change)="updateRecommendations()">
+              <option value="iniciante">🌱 Iniciante</option>
+              <option value="amador">🔭 Amador</option>
+              <option value="avancado">🚀 Avançado</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>🌟 Tópicos de Interesse:</label>
+            <div class="topics-grid">
+              <label class="topic-checkbox" *ngFor="let topico of topicosDisponiveis">
+                <input 
+                  type="checkbox" 
+                  [value]="topico.id"
+                  [checked]="userProfile.topicos.includes(topico.id)"
+                  (change)="toggleTopic(topico.id)">
+                <span>{{topico.icon}} {{topico.nome}}</span>
+              </label>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary" (click)="saveProfile()">
+            💾 Salvar Perfil
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trilhas Recomendadas -->
+    <section class="recommended-tracks" *ngIf="trilhasRecomendadas.length > 0">
+      <h2>⭐ Trilhas Recomendadas para Você</h2>
+      <div class="grid grid-2">
+        <div class="card track-card recommended" *ngFor="let trilha of trilhasRecomendadas">
+          <div class="track-header">
+            <span class="track-icon">{{trilha.icon}}</span>
+            <span class="track-level">{{trilha.nivel}}</span>
+          </div>
+          <h3>{{trilha.titulo}}</h3>
+          <p class="track-description">{{trilha.descricao}}</p>
+          <div class="track-info">
+            <span class="track-duration">⏱️ {{trilha.duracao}}</span>
+            <span class="track-modules">📚 {{trilha.modulos}} módulos</span>
+          </div>
+          <div class="track-progress" *ngIf="trilha.progresso > 0">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="trilha.progresso"></div>
+            </div>
+            <span class="progress-text">{{trilha.progresso}}% concluído</span>
+          </div>
+          <div class="track-actions">
+            <button class="btn btn-primary" (click)="startTrack(trilha)">
+              {{trilha.progresso > 0 ? 'Continuar' : 'Iniciar'}} Trilha
+            </button>
+            <button class="btn btn-secondary" (click)="viewTrackDetails(trilha)">
+              📋 Detalhes
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Todas as Trilhas -->
+    <section class="all-tracks">
+      <h2>🚀 Todas as Trilhas Disponíveis</h2>
+      
+      <!-- Filtros -->
+      <div class="track-filters">
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedLevel === 'todos'"
+          (click)="filterByLevel('todos')">
+          Todos os Níveis
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedLevel === 'iniciante'"
+          (click)="filterByLevel('iniciante')">
+          🌱 Iniciante
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedLevel === 'amador'"
+          (click)="filterByLevel('amador')">
+          🔭 Amador
+        </button>
+        <button 
+          class="filter-btn" 
+          [class.active]="selectedLevel === 'avancado'"
+          (click)="filterByLevel('avancado')">
+          🚀 Avançado
+        </button>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card track-card" *ngFor="let trilha of filteredTracks">
+          <div class="track-header">
+            <span class="track-icon">{{trilha.icon}}</span>
+            <span class="track-level">{{trilha.nivel}}</span>
+          </div>
+          <h3>{{trilha.titulo}}</h3>
+          <p class="track-description">{{trilha.descricao}}</p>
+          
+          <!-- Módulos da Trilha -->
+          <div class="track-modules-list">
+            <h4>📚 Módulos:</h4>
+            <ul>
+              <li *ngFor="let modulo of trilha.modulosDetalhados">
+                <span class="module-icon">{{modulo.icon}}</span>
+                {{modulo.nome}}
+                <span class="module-duration">({{modulo.duracao}})</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="track-info">
+            <span class="track-duration">⏱️ {{trilha.duracao}}</span>
+            <span class="track-difficulty">📊 {{trilha.dificuldade}}</span>
+          </div>
+          
+          <div class="track-progress" *ngIf="trilha.progresso > 0">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="trilha.progresso"></div>
+            </div>
+            <span class="progress-text">{{trilha.progresso}}% concluído</span>
+          </div>
+          
+          <div class="track-actions">
+            <button class="btn btn-primary" (click)="startTrack(trilha)">
+              {{trilha.progresso > 0 ? 'Continuar' : 'Iniciar'}}
+            </button>
+            <button class="btn btn-secondary" (click)="viewTrackDetails(trilha)">
+              📋 Ver Mais
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recursos Especiais -->
+    <section class="special-resources">
+      <h2>✨ Recursos Especiais</h2>
+      <div class="grid grid-2">
+        <div class="card resource-card">
+          <h3>📱 Realidade Aumentada</h3>
+          <p>Use seu dispositivo móvel para apontar para o céu e receber informações interativas sobre estrelas, planetas e constelações.</p>
+          <button class="btn btn-primary" (click)="openARMode()">
+            🔍 Ativar Modo AR
+          </button>
+        </div>
+        
+        <div class="card resource-card">
+          <h3>🏛️ Eventos Locais (Salvador)</h3>
+          <p>Calendário integrado com observatórios, universidades e grupos de astronomia amadora da região.</p>
+          <button class="btn btn-primary" (click)="viewLocalEvents()">
+            📅 Ver Eventos
+          </button>
+        </div>
+        
+        <div class="card resource-card">
+          <h3>🎯 Simulador Interativo</h3>
+          <p>Explore o sistema solar, galáxias e fenômenos astronômicos em um ambiente 3D interativo.</p>
+          <button class="btn btn-primary" (click)="openSimulator()">
+            🌌 Abrir Simulador
+          </button>
+        </div>
+        
+        <div class="card resource-card">
+          <h3>📖 Biblioteca de Recursos</h3>
+          <p>Acesso a artigos científicos, vídeos educacionais e materiais complementares organizados por tópico.</p>
+          <button class="btn btn-primary" (click)="openLibrary()">
+            📚 Explorar Biblioteca
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificações -->
+    <section class="certifications">
+      <div class="card certification-card">
+        <h2>🏆 Sistema de Certificações</h2>
+        <p>Complete trilhas e ganhe certificados reconhecidos pela comunidade astronômica!</p>
+        
+        <div class="achievements-grid">
+          <div class="achievement" *ngFor="let certificado of certificados">
+            <div class="achievement-icon" [class.earned]="certificado.conquistado">
+              {{certificado.icon}}
+            </div>
+            <div class="achievement-info">
+              <h4>{{certificado.nome}}</h4>
+              <p>{{certificado.descricao}}</p>
+              <div class="achievement-progress" *ngIf="!certificado.conquistado">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="certificado.progresso"></div>
+                </div>
+                <span>{{certificado.progresso}}% para conquistar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

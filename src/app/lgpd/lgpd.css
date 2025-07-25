@@ -1,0 +1,117 @@
+/* LGPD Page Styles */
+.lgpd-container {
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  background: var(--gradient-space);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.content-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.content-section .card {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.content-section h2 {
+  color: var(--secondary-color);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content-section h3 {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.content-section ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.content-section li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.content-section p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.contact-info {
+  background: rgba(107, 70, 193, 0.1);
+  border-left: 4px solid var(--secondary-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.contact-info p {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.back-button {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lgpd-container {
+    padding: 1rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .content-section {
+    padding: 0 1rem;
+  }
+  
+  .content-section h2 {
+    font-size: 1.3rem;
+  }
+  
+  .contact-info {
+    padding: 1rem;
+  }
+}
+

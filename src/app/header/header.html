@@ -1,0 +1,122 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <a routerLink="/" class="logo-link">
+        <span class="logo-icon">🌌</span>
+        <span class="logo-text">Órbita Pessoal</span>
+      </a>
+    </div>
+    
+    <nav class="nav" [attr.aria-label]="'Navegação principal'">
+      <ul class="nav-list">
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Início</a></li>
+        <li><a routerLink="/cursos" routerLinkActive="active">Cursos</a></li>
+        <li><a routerLink="/noticias" routerLinkActive="active">Notícias</a></li>
+        <li><a routerLink="/jogo" routerLinkActive="active">Jogo</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-actions">
+      <!-- Botão de Acessibilidade -->
+      <div class="accessibility-menu" [class.open]="isAccessibilityOpen">
+        <button 
+          class="accessibility-btn"
+          (click)="toggleAccessibility()"
+          [attr.aria-expanded]="isAccessibilityOpen"
+          aria-label="Opções de acessibilidade">
+          ♿
+        </button>
+        
+        <div class="accessibility-panel" *ngIf="isAccessibilityOpen">
+          <h3>Acessibilidade</h3>
+          
+          <div class="accessibility-option">
+            <label>
+              <input 
+                type="checkbox" 
+                [checked]="isDarkMode"
+                (change)="toggleDarkMode()">
+              <span>🌙 Modo Escuro</span>
+            </label>
+          </div>
+          
+          <div class="accessibility-option">
+            <label>
+              <input 
+                type="checkbox" 
+                [checked]="isHighContrast"
+                (change)="toggleHighContrast()">
+              <span>🔆 Alto Contraste</span>
+            </label>
+          </div>
+          
+          <div class="accessibility-option">
+            <label>
+              <input 
+                type="checkbox" 
+                [checked]="isLargeFont"
+                (change)="toggleLargeFont()">
+              <span>🔍 Fonte Grande</span>
+            </label>
+          </div>
+          
+          <div class="accessibility-option">
+            <button 
+              class="btn btn-secondary"
+              (click)="resetAccessibility()">
+              🔄 Resetar
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Botões de Login -->
+      <div class="auth-buttons">
+        <button class="btn btn-secondary" (click)="loginWithGoogle()">
+          <img src="/assets/google-icon.png" alt="" class="social-icon">
+          Google
+        </button>
+        <button class="btn btn-primary" (click)="loginWithFacebook()">
+          <img src="/assets/facebook-icon.png" alt="" class="social-icon">
+          Facebook
+        </button>
+      </div>
+      
+      <!-- Menu Mobile -->
+      <button 
+        class="mobile-menu-btn"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-label="Menu de navegação">
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Menu Mobile -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+    <nav class="mobile-nav">
+      <ul class="mobile-nav-list">
+        <li><a routerLink="/" (click)="closeMobileMenu()">Início</a></li>
+        <li><a routerLink="/cursos" (click)="closeMobileMenu()">Cursos</a></li>
+        <li><a routerLink="/noticias" (click)="closeMobileMenu()">Notícias</a></li>
+        <li><a routerLink="/jogo" (click)="closeMobileMenu()">Jogo</a></li>
+        <li><a routerLink="/perfil" (click)="closeMobileMenu()">Meu Perfil</a></li>
+      </ul>
+      
+      <div class="mobile-auth">
+        <button class="btn btn-secondary" (click)="loginWithGoogle()">
+          <img src="/assets/google-icon.png" alt="" class="social-icon">
+          Google
+        </button>
+        <button class="btn btn-primary" (click)="loginWithFacebook()">
+          <img src="/assets/facebook-icon.png" alt="" class="social-icon">
+          Facebook
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
